@@ -1,5 +1,10 @@
 import styled, { css } from "styled-components";
 
+interface IButtonProps {
+  variation?: "primary" | "secondary" | "danger";
+  size?: "small" | "medium" | "large";
+}
+
 const sizes = {
   small: css`
     font-size: 1.2rem;
@@ -48,20 +53,18 @@ const variations = {
   `,
 };
 
-const Button = styled.button`
-  padding: 1.2rem 1.6rem;
+const Button = styled.button<IButtonProps>`
   border: none;
   border-radius: var(--border-radius-sm);
-  background-color: var(--color-brand-600);
-  color: var(--color-brand-50);
-  font-size: 1.4rem;
-  font-weight: 500;
   box-shadow: var(--shadow-sm);
-  cursor: pointer;
 
-  &:hover {
-    background-color: var(--color-brand-700);
-  }
+  ${(props) => sizes[props.size!]}
+  ${(props) => variations[props.variation!]}
 `;
+
+Button.defaultProps = {
+  variation: "primary",
+  size: "medium",
+};
 
 export default Button;

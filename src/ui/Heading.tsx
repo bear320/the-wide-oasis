@@ -1,10 +1,10 @@
 import styled, { css } from "styled-components";
 
-interface IProps {
+interface IHeadingProps {
   as: "h1" | "h2" | "h3";
 }
 
-const Heading = styled.h1<IProps>`
+const Heading = styled.h1<IHeadingProps>`
   ${(props) =>
     props.as === "h1" &&
     css`
