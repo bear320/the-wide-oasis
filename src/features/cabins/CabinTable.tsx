@@ -34,7 +34,7 @@ const CabinTable = () => {
     isPending,
     error,
   } = useQuery({
-    queryKey: ["cabin"],
+    queryKey: ["cabins"],
     queryFn: getCabins,
   });
 
