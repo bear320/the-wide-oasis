@@ -15,6 +15,7 @@ import Account from "./pages/Account";
 import Login from "./pages/Login";
 import PageNotFound from "./pages/PageNotFound";
 import AppLayout from "./ui/AppLayout";
+import { Toaster } from "react-hot-toast";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -73,6 +74,26 @@ const App = () => {
       <ReactQueryDevtools initialIsOpen={false} />
       <GlobalStyles />
       <RouterProvider router={router} />
+      <Toaster
+        position="top-center"
+        gutter={12}
+        containerStyle={{ margin: "0.5rem" }}
+        toastOptions={{
+          success: {
+            duration: 3000,
+          },
+          error: {
+            duration: 5000,
+          },
+          style: {
+            padding: "1rem 1.5rem",
+            maxWidth: "500px",
+            backgroundColor: "var(--color-grey-0)",
+            color: "var(--color-grey-700)",
+            fontSize: "1rem",
+          },
+        }}
+      />
     </QueryClientProvider>
   );
 };

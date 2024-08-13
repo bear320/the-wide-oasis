@@ -2,24 +2,24 @@ import supabase from "./supabase";
 
 export const getCabins = async () => {
   try {
-    const { data } = await supabase.from("cabins").select("*");
+    const { data, error } = await supabase.from("cabins").select("*");
+
+    if (error) throw new Error("Cabin could not be deleted.");
+
     return data;
   } catch (error) {
     console.error(error);
-    throw new Error("Cabins could not be loaded.");
+    throw error;
   }
 };
 
 export const deleteCabin = async (id: number) => {
-  //   const { error } = await supabase
-  //     .from("cabins")
-  //     .delete()
-  //     .eq("some_column", "someValue");
-
   try {
-    await supabase.from("cabins").delete().eq("id", id);
+    const { error } = await supabase.from("cabins").delete().eq("id", id);
+
+    if (error) throw new Error("Cabin could not be deleted.");
   } catch (error) {
     console.error(error);
-    throw new Error("Cabin could not be deleted.");
+    throw error;
   }
 };
