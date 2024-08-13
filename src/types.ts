@@ -8,3 +8,5 @@ export interface ICabin {
   image: string;
   created_at: string;
 }
+
+export type ICabinMutation = Omit<ICabin, "id" | "image" | "created_at">;
