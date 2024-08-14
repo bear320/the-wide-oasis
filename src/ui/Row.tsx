@@ -7,23 +7,19 @@ interface IRowProps {
 const Row = styled.div<IRowProps>`
   display: flex;
 
-  ${({ type }) =>
+  ${({ type = "vertical" }) =>
     type === "horizontal" &&
     css`
       justify-content: space-between;
       align-items: center;
     `}
 
-  ${({ type }) =>
+  ${({ type = "vertical" }) =>
     type === "vertical" &&
     css`
       flex-direction: column;
       gap: 1.6rem;
     `}
 `;
-
-Row.defaultProps = {
-  type: "vertical",
-};
 
 export default Row;

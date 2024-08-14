@@ -5,8 +5,8 @@ export interface ICabin {
   maxCapacity: number;
   regularPrice: number;
   discount: number;
-  image: string;
+  image: File | string;
   created_at: string;
 }
 
-export type ICabinMutation = Omit<ICabin, "id" | "image" | "created_at">;
+export type ICabinMutation = Omit<ICabin, "id" | "created_at">;
