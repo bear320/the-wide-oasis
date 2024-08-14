@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 interface IButtonProps {
-  variation?: "primary" | "secondary" | "danger";
+  $variation?: "primary" | "secondary" | "danger";
   size?: "small" | "medium" | "large";
 }
 
@@ -59,7 +59,7 @@ const Button = styled.button<IButtonProps>`
   box-shadow: var(--shadow-sm);
 
   ${(props) => sizes[props.size || "medium"]}
-  ${(props) => variations[props.variation || "primary"]}
+  ${(props) => variations[props.$variation || "primary"]}
 `;
 
 export default Button;
