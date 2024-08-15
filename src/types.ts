@@ -10,3 +10,10 @@ export interface ICabin {
 }
 
 export type ICabinMutation = Omit<ICabin, "id" | "created_at">;
+
+export enum Setting {
+  minBookingLength = "minBookingLength",
+  maxBookingLength = "maxBookingLength",
+  maxGuestsPerBooking = "maxGuestsPerBooking",
+  breakfastPrice = "breakfastPrice",
+}
