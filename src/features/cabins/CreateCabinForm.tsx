@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FieldValues, useForm } from "react-hook-form";
-import { createCabin, editCabin } from "../../services/apiCabins";
+import { useCreateCabin } from "./useCreateCabin";
+import { useEditCabin } from "./useEditCabin";
 import { ICabin, ICabinMutation } from "../../types";
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
@@ -8,7 +8,6 @@ import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
-import toast from "react-hot-toast";
 
 function CreateCabinForm({
   cabinToEdit = {},
@@ -23,37 +22,8 @@ function CreateCabinForm({
   });
   const { errors } = formState;
 
-  const queryClient = useQueryClient();
-  const { mutate: mutataCreateCabin, isPending: isCreating } = useMutation({
-    mutationFn: createCabin,
-    onSuccess: () => {
-      toast.success("New cabin created successfully!");
-      queryClient.invalidateQueries({ queryKey: ["cabins"] });
-      reset();
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
-  });
-
-  const { mutate: mutateEditCabin, isPending: isEditing } = useMutation({
-    mutationFn: ({
-      id,
-      cabinData,
-    }: {
-      id: number;
-      cabinData: ICabinMutation;
-    }) => editCabin(id, cabinData),
-    onSuccess: () => {
-      toast.success("Cabin edited successfully!");
-      queryClient.invalidateQueries({ queryKey: ["cabins"] });
-      reset();
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
-  });
-
+  const { createCabin, isCreating } = useCreateCabin();
+  const { editCabin, isEditing } = useEditCabin();
   const isWorking = isCreating || isEditing;
 
   const onSubmit = (data: FieldValues) => {
@@ -66,8 +36,17 @@ function CreateCabinForm({
       image: typeof data.image === "string" ? data.image : data.image[0],
     };
 
-    if (editId && isEditSession) mutateEditCabin({ cabinData, id: editId });
-    else mutataCreateCabin(cabinData);
+    if (editId && isEditSession)
+      editCabin(
+        { cabinData, id: editId },
+        {
+          onSuccess: (data) => reset(),
+        }
+      );
+    else
+      createCabin(cabinData, {
+        onSuccess: (data) => reset(),
+      });
   };
 
   // const onError = (errors: unknown) => {

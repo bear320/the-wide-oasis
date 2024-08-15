@@ -37,7 +37,8 @@ export const createCabin = async (cabin: ICabinMutation) => {
           image: imageUrl,
         },
       ])
-      .select();
+      .select()
+      .single();
 
     // 3. Delete the image if there was an error creating new cabin
     if (cabinError) {
@@ -71,7 +72,8 @@ export const editCabin = async (id: number, cabin: ICabinMutation) => {
       .from("cabins")
       .update({ ...cabin, image: imageUrl })
       .eq("id", id)
-      .select();
+      .select()
+      .single();
 
     // 3. Delete the image if there was an error editing cabin
     if (cabinError) {
