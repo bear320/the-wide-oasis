@@ -37,8 +37,7 @@ export const createCabin = async (cabin: ICabinMutation) => {
           image: imageUrl,
         },
       ])
-      .select()
-      .single();
+      .select();
 
     // 3. Delete the image if there was an error creating new cabin
     if (cabinError) {
@@ -93,6 +92,25 @@ export const editCabin = async (id: number, cabin: ICabinMutation) => {
     if (cabinError) {
       console.error(cabinError);
       throw new Error("New cabin could not be edited.");
+    }
+
+    return cabinData;
+  }
+};
+
+export const duplicateCabin = async (cabin: ICabinMutation) => {
+  if (
+    typeof cabin.image === "string" &&
+    cabin.image.startsWith(import.meta.env.VITE_SUPABASE_URL)
+  ) {
+    const { data: cabinData, error: cabinError } = await supabase
+      .from("cabins")
+      .insert([cabin])
+      .select();
+
+    if (cabinError) {
+      console.error(cabinError);
+      throw new Error("Cabin could not be duplicated.");
     }
 
     return cabinData;
