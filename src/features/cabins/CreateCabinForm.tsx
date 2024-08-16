@@ -11,8 +11,10 @@ import FormRow from "../../ui/FormRow";
 
 function CreateCabinForm({
   cabinToEdit = {},
+  onCloseModal,
 }: {
-  cabinToEdit: Partial<ICabin>;
+  cabinToEdit?: Partial<ICabin>;
+  onCloseModal?: () => void;
 }) {
   const { id: editId, ...editValues } = cabinToEdit;
   const isEditSession = Boolean(editId);
@@ -40,12 +42,18 @@ function CreateCabinForm({
       editCabin(
         { cabinData, id: editId },
         {
-          onSuccess: (data) => reset(),
+          onSuccess: () => {
+            reset();
+            onCloseModal?.();
+          },
         }
       );
     else
       createCabin(cabinData, {
-        onSuccess: (data) => reset(),
+        onSuccess: () => {
+          reset();
+          onCloseModal?.();
+        },
       });
   };
 
@@ -54,11 +62,8 @@ function CreateCabinForm({
   // };
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <FormRow
-        label="Cabin name"
-        error={errors?.name?.message?.toString() ?? ""}
-      >
+    <Form type={onCloseModal ? "modal" : "regular"} onSubmit={handleSubmit(onSubmit)}>
+      <FormRow label="Cabin name" error={errors?.name?.message?.toString() ?? ""}>
         <Input
           type="text"
           id="name"
@@ -67,10 +72,7 @@ function CreateCabinForm({
         />
       </FormRow>
 
-      <FormRow
-        label="Maximum capacity"
-        error={errors?.maxCapacity?.message?.toString() ?? ""}
-      >
+      <FormRow label="Maximum capacity" error={errors?.maxCapacity?.message?.toString() ?? ""}>
         <Input
           type="number"
           id="maxCapacity"
@@ -82,10 +84,7 @@ function CreateCabinForm({
         />
       </FormRow>
 
-      <FormRow
-        label="Regular price"
-        error={errors?.regularPrice?.message?.toString() ?? ""}
-      >
+      <FormRow label="Regular price" error={errors?.regularPrice?.message?.toString() ?? ""}>
         <Input
           type="number"
           id="regularPrice"
@@ -97,10 +96,7 @@ function CreateCabinForm({
         />
       </FormRow>
 
-      <FormRow
-        label="Discount"
-        error={errors?.discount?.message?.toString() ?? ""}
-      >
+      <FormRow label="Discount" error={errors?.discount?.message?.toString() ?? ""}>
         <Input
           type="number"
           id="discount"
@@ -116,10 +112,7 @@ function CreateCabinForm({
         />
       </FormRow>
 
-      <FormRow
-        label="Description"
-        error={errors?.description?.message?.toString() ?? ""}
-      >
+      <FormRow label="Description" error={errors?.description?.message?.toString() ?? ""}>
         <Textarea
           id="description"
           defaultValue=""
@@ -130,10 +123,7 @@ function CreateCabinForm({
         />
       </FormRow>
 
-      <FormRow
-        label="Cabin image"
-        error={errors?.image?.message?.toString() ?? ""}
-      >
+      <FormRow label="Cabin image" error={errors?.image?.message?.toString() ?? ""}>
         <FileInput
           id="image"
           accept="image/*"
@@ -146,12 +136,10 @@ function CreateCabinForm({
       <FormRow>
         {/* type is an HTML attribute! */}
         <>
-          <Button type="reset" $variation="secondary">
+          <Button type="reset" $variation="secondary" onClick={() => onCloseModal?.()}>
             Cancel
           </Button>
-          <Button disabled={isWorking}>
-            {isEditSession ? "Edit cabin" : "Create new cabin"}
-          </Button>
+          <Button disabled={isWorking}>{isEditSession ? "Edit cabin" : "Create new cabin"}</Button>
         </>
       </FormRow>
     </Form>
