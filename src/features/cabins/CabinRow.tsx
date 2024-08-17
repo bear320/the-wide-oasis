@@ -1,11 +1,12 @@
-import { useState } from "react";
 import { useDuplicateCabin } from "./useDuplicateCabin";
 import { useDeleteCabin } from "./useDeleteCabin";
 import { ICabin } from "../../types";
 import { formatCurrency } from "../../utils/helpers";
+import Modal from "../../ui/Modal";
 import CreateCabinForm from "./CreateCabinForm";
 import styled from "styled-components";
 import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
+import ConfirmDelete from "../../ui/ConfirmDelete";
 
 const TableRow = styled.div`
   display: grid;
@@ -47,19 +48,10 @@ const Discount = styled.div`
 `;
 
 const CabinRow = ({ cabin }: { cabin: ICabin }) => {
-  const [showForm, setShowForm] = useState(false);
   const { duplicateCabin, isDuplicating } = useDuplicateCabin();
   const { deleteCabin, isDeleting } = useDeleteCabin();
 
-  const {
-    id: cabinId,
-    name,
-    description,
-    maxCapacity,
-    regularPrice,
-    discount,
-    image,
-  } = cabin;
+  const { id: cabinId, name, description, maxCapacity, regularPrice, discount, image } = cabin;
 
   const handleDuplicate = () => {
     duplicateCabin({
@@ -73,31 +65,37 @@ const CabinRow = ({ cabin }: { cabin: ICabin }) => {
   };
 
   return (
-    <>
-      <TableRow role="row">
-        <Img src={image} />
-        <Cabin>{name}</Cabin>
-        <div>Fits up to {maxCapacity} guests</div>
-        <Price>{formatCurrency(regularPrice)}</Price>
-        {discount ? (
-          <Discount>{formatCurrency(discount)}</Discount>
-        ) : (
-          <span>&mdash;</span>
-        )}
-        <div>
-          <button disabled={isDuplicating} onClick={handleDuplicate}>
-            <HiSquare2Stack />
-          </button>
-          <button onClick={() => setShowForm((show) => !show)}>
-            <HiPencil />
-          </button>
-          <button disabled={isDeleting} onClick={() => deleteCabin(cabinId)}>
-            <HiTrash />
-          </button>
-        </div>
-      </TableRow>
-      {showForm && <CreateCabinForm cabinToEdit={cabin} />}
-    </>
+    <TableRow role="row">
+      <Img src={image} />
+      <Cabin>{name}</Cabin>
+      <div>Fits up to {maxCapacity} guests</div>
+      <Price>{formatCurrency(regularPrice)}</Price>
+      {discount ? <Discount>{formatCurrency(discount)}</Discount> : <span>&mdash;</span>}
+      <div>
+        <button disabled={isDuplicating} onClick={handleDuplicate}>
+          <HiSquare2Stack />
+        </button>
+        <Modal>
+          <Modal.Open opens="edit">
+            <button>
+              <HiPencil />
+            </button>
+          </Modal.Open>
+          <Modal.Window name="edit">
+            <CreateCabinForm cabinToEdit={cabin} />
+          </Modal.Window>
+
+          <Modal.Open opens="delete">
+            <button>
+              <HiTrash />
+            </button>
+          </Modal.Open>
+          <Modal.Window name="delete">
+            <ConfirmDelete resourceName="cabins" disabled={isDeleting} onConfirm={() => deleteCabin(cabinId)} />
+          </Modal.Window>
+        </Modal>
+      </div>
+    </TableRow>
   );
 };
 
