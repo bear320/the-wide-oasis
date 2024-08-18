@@ -100,7 +100,18 @@ const Row = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-const Body = ({ children }: { children: React.ReactNode }) => {};
+interface IBodyProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  render: (item: any) => React.ReactNode;
+}
+
+const Body = ({ data, render }: IBodyProps) => {
+  if (!data.length) return <Empty>No data to show at the moment.</Empty>;
+
+  return <StyledBody as="tbody">{data.map(render)}</StyledBody>;
+};
 
 Table.Header = Header;
 Table.Row = Row;

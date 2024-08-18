@@ -3,6 +3,7 @@ import { useCabins } from "./useCabins";
 import Spinner from "../../ui/Spinner";
 import CabinRow from "./CabinRow";
 import Table from "../../ui/Table";
+import { ICabin } from "../../types";
 
 // const Table = styled.div`
 //   border: 1px solid var(--color-grey-200);
@@ -44,9 +45,7 @@ const CabinTable = () => {
         <td></td>
       </Table.Header>
 
-      {cabins?.map((cabin) => (
-        <CabinRow cabin={cabin} key={cabin.id} />
-      ))}
+      <Table.Body data={cabins!} render={(cabin: ICabin) => <CabinRow cabin={cabin} key={cabin.id} />} />
     </Table>
   );
 };
