@@ -53,13 +53,13 @@ const Button = styled.button`
   }
 `;
 
-interface IModalContextType {
+interface IModalContext {
   openName: string;
   close: () => void;
   open: (name: string) => void;
 }
 
-const ModalContext = createContext<IModalContextType>({
+const ModalContext = createContext<IModalContext>({
   openName: "",
   close: () => {},
   open: () => {},

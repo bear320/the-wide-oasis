@@ -7,18 +7,19 @@ import CreateCabinForm from "./CreateCabinForm";
 import styled from "styled-components";
 import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
 import ConfirmDelete from "../../ui/ConfirmDelete";
+import Table from "../../ui/Table";
 
-const TableRow = styled.div`
-  display: grid;
-  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
-  column-gap: 2.4rem;
-  align-items: center;
-  padding: 1.4rem 2.4rem;
+// const TableRow = styled.div`
+//   display: grid;
+//   grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
+//   column-gap: 2.4rem;
+//   align-items: center;
+//   padding: 1.4rem 2.4rem;
 
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--color-grey-100);
-  }
-`;
+//   &:not(:last-child) {
+//     border-bottom: 1px solid var(--color-grey-100);
+//   }
+// `;
 
 const Img = styled.img`
   display: block;
@@ -65,8 +66,8 @@ const CabinRow = ({ cabin }: { cabin: ICabin }) => {
   };
 
   return (
-    <TableRow role="row">
-      <Img src={image} />
+    <Table.Row>
+      <Img src={image.toString()} />
       <Cabin>{name}</Cabin>
       <div>Fits up to {maxCapacity} guests</div>
       <Price>{formatCurrency(regularPrice)}</Price>
@@ -95,7 +96,7 @@ const CabinRow = ({ cabin }: { cabin: ICabin }) => {
           </Modal.Window>
         </Modal>
       </div>
-    </TableRow>
+    </Table.Row>
   );
 };
 
