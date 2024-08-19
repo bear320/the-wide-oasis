@@ -1,10 +1,6 @@
 import { createContext, useContext } from "react";
 import styled from "styled-components";
 
-interface ITableProps {
-  columns: string;
-}
-
 const StyledTable = styled.div`
   border: 1px solid var(--color-grey-200);
 
@@ -14,9 +10,13 @@ const StyledTable = styled.div`
   overflow: hidden;
 `;
 
-const CommonRow = styled.div<ITableProps>`
+interface IRowProps {
+  $columns: string;
+}
+
+const CommonRow = styled.div<IRowProps>`
   display: grid;
-  grid-template-columns: ${(props) => props.columns};
+  grid-template-columns: ${(props) => props.$columns};
   column-gap: 2.4rem;
   align-items: center;
   transition: none;
@@ -75,9 +75,7 @@ const TableContext = createContext<ITableContextType>({
 const Table = ({ columns, children }: { columns: string; children: React.ReactNode }) => {
   return (
     <TableContext.Provider value={{ columns }}>
-      <StyledTable as="table" role="table">
-        {children}
-      </StyledTable>
+      <StyledTable role="table">{children}</StyledTable>
     </TableContext.Provider>
   );
 };
@@ -85,7 +83,7 @@ const Table = ({ columns, children }: { columns: string; children: React.ReactNo
 const Header = ({ children }: { children: React.ReactNode }) => {
   const { columns } = useContext(TableContext);
   return (
-    <StyledHeader columns={columns} as="tr" role="row">
+    <StyledHeader $columns={columns} role="row">
       {children}
     </StyledHeader>
   );
@@ -94,7 +92,7 @@ const Header = ({ children }: { children: React.ReactNode }) => {
 const Row = ({ children }: { children: React.ReactNode }) => {
   const { columns } = useContext(TableContext);
   return (
-    <StyledRow columns={columns} as="tr" role="row">
+    <StyledRow $columns={columns} role="row">
       {children}
     </StyledRow>
   );
@@ -110,7 +108,7 @@ interface IBodyProps {
 const Body = ({ data, render }: IBodyProps) => {
   if (!data.length) return <Empty>No data to show at the moment.</Empty>;
 
-  return <StyledBody as="tbody">{data.map(render)}</StyledBody>;
+  return <StyledBody>{data.map(render)}</StyledBody>;
 };
 
 Table.Header = Header;
