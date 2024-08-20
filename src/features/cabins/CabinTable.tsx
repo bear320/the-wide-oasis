@@ -5,12 +5,15 @@ import Spinner from "../../ui/Spinner";
 import Menus from "../../ui/Menus";
 import CabinRow from "./CabinRow";
 import Table from "../../ui/Table";
+import Empty from "../../ui/Empty";
 
 const CabinTable = () => {
   const [searchParams] = useSearchParams();
   const { cabins, isFetching } = useCabins();
 
   if (isFetching) return <Spinner />;
+
+  if (!cabins?.length) return <Empty resourceName="cabins" />;
 
   // Filter
   const filterValue = searchParams.get("discount") || "all";
