@@ -12,9 +12,10 @@ const CabinTable = () => {
 
   if (isFetching) return <Spinner />;
 
+  // Filter
   const filterValue = searchParams.get("discount") || "all";
 
-  let filteredCabins: ICabin[];
+  let filteredCabins: ICabin[] = [];
 
   if (filterValue === "all") filteredCabins = [...(cabins as ICabin[])];
   else if (filterValue === "with-discount")
@@ -25,6 +26,17 @@ const CabinTable = () => {
     filteredCabins = (cabins as ICabin[])?.filter(
       (cabin) => cabin.discount === 0
     );
+
+  // Sort
+  const sortBy = searchParams.get("sortBy") || "startDate-asc";
+  const [field, direction] = sortBy.split("-") as [
+    keyof ICabin,
+    "asc" | "desc"
+  ];
+  const modifier = direction === "asc" ? 1 : -1;
+  const sortedCabins = filteredCabins.sort(
+    (a, b) => (+a[field] - +b[field]) * modifier
+  );
 
   return (
     <Menus>
@@ -39,7 +51,7 @@ const CabinTable = () => {
         </Table.Header>
 
         <Table.Body
-          data={filteredCabins!}
+          data={sortedCabins!}
           render={(cabin: ICabin) => <CabinRow cabin={cabin} key={cabin.id} />}
         />
       </Table>
