@@ -1,13 +1,13 @@
 import { createContext, useContext, useState } from "react";
-import { createPortal } from "react-dom";
 import { HiEllipsisVertical } from "react-icons/hi2";
 import styled from "styled-components";
 import { useOutsideClick } from "../hooks/useOutsideClick";
 
 const Menu = styled.div`
+  position: relative;
   display: flex;
-  align-items: center;
   justify-content: flex-end;
+  align-items: center;
 `;
 
 const StyledToggle = styled.button`
@@ -34,14 +34,13 @@ interface IListProps {
 }
 
 const StyledList = styled.ul<IListProps>`
-  position: fixed;
-
+  position: absolute;
+  top: ${(props) => props.$position.y}px;
+  right: ${(props) => props.$position.x}px;
+  border-radius: var(--border-radius-md);
   background-color: var(--color-grey-0);
   box-shadow: var(--shadow-md);
-  border-radius: var(--border-radius-md);
-
-  right: ${(props) => props.$position.x}px;
-  top: ${(props) => props.$position.y}px;
+  z-index: 1;
 `;
 
 const StyledButton = styled.button`
@@ -87,13 +86,19 @@ const MenusContext = createContext<IMenusProps>({
 
 const Menus = ({ children }: { children: React.ReactNode }) => {
   const [openId, setOpenId] = useState("");
-  const [position, setPosition] = useState<null | { x: number; y: number }>(null);
+  const [position, setPosition] = useState<null | { x: number; y: number }>(
+    null
+  );
 
   const open = (id: string) => setOpenId(id);
   const close = () => setOpenId("");
 
   return (
-    <MenusContext.Provider value={{ openId, close, open, position, setPosition }}>{children}</MenusContext.Provider>
+    <MenusContext.Provider
+      value={{ openId, close, open, position, setPosition }}
+    >
+      {children}
+    </MenusContext.Provider>
   );
 };
 
@@ -101,10 +106,13 @@ const Toggle = ({ id }: { id: string }) => {
   const { openId, open, close, setPosition } = useContext(MenusContext);
 
   const handleClick = (e: React.MouseEvent) => {
-    const rect = (e.target as HTMLElement).closest("button")!.getBoundingClientRect();
+    const rect = (e.target as HTMLElement)
+      .closest("button")!
+      .getBoundingClientRect();
+
     setPosition({
-      x: window.innerWidth - rect.width - rect.x,
-      y: rect.y + rect.height + 8,
+      x: -8,
+      y: rect.height + 8,
     });
 
     const shouldOpen = openId === "" || openId !== id;
@@ -125,11 +133,13 @@ const List = ({ id, children }: { id: string; children: React.ReactNode }) => {
 
   if (openId !== id) return null;
 
-  return createPortal(
-    <StyledList $position={position!} ref={ref as unknown as React.RefObject<HTMLUListElement>}>
+  return (
+    <StyledList
+      $position={position!}
+      ref={ref as unknown as React.RefObject<HTMLUListElement>}
+    >
       {children}
-    </StyledList>,
-    document.body
+    </StyledList>
   );
 };
 
