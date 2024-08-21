@@ -1,3 +1,4 @@
+import { IBooking } from "../types";
 import { PAGE_SIZE } from "../utils/constants";
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
@@ -113,10 +114,7 @@ export async function getStaysTodayActivity() {
   return data;
 }
 
-export const updateBooking = async (
-  id: number,
-  obj: { status: string; isPaid: boolean }
-) => {
+export const updateBooking = async (id: number, obj: Partial<IBooking>) => {
   const { data, error } = await supabase
     .from("bookings")
     .update(obj)
