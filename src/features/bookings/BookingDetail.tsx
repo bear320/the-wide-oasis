@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useBooking } from "./useBooking";
+import { useCheckout } from "../check-in-out/useCheckout";
 import { useMoveBack } from "../../hooks/useMoveBack";
 import BookingDataBox from "./BookingDataBox";
 import Row from "../../ui/Row";
@@ -19,6 +20,7 @@ const HeadingGroup = styled.div`
 
 function BookingDetail() {
   const { booking, isFetching } = useBooking();
+  const { checkout, isCheckingOut } = useCheckout();
   const navigate = useNavigate();
   const moveBack = useMoveBack();
 
@@ -37,9 +39,7 @@ function BookingDetail() {
       <Row type="horizontal">
         <HeadingGroup>
           <Heading as="h1">Booking #{id}</Heading>
-          <Tag $type={statusToTagName[status as keyof typeof statusToTagName]}>
-            {status.replace("-", " ")}
-          </Tag>
+          <Tag $type={statusToTagName[status as keyof typeof statusToTagName]}>{status.replace("-", " ")}</Tag>
         </HeadingGroup>
         <ButtonText onClick={moveBack}>&larr; Back</ButtonText>
       </Row>
@@ -48,8 +48,12 @@ function BookingDetail() {
 
       <ButtonGroup>
         {booking.status === "unconfirmed" && (
-          <Button onClick={() => navigate(`/checkin/${booking.id}`)}>
-            Check in
+          <Button onClick={() => navigate(`/checkin/${booking.id}`)}>Check in</Button>
+        )}
+
+        {booking.status === "checked-in" && (
+          <Button disabled={isCheckingOut} onClick={() => checkout(booking.id)}>
+            Check out
           </Button>
         )}
 

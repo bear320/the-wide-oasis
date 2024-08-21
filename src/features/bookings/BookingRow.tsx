@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useCheckout } from "../check-in-out/useCheckout";
 import { IBookingRowProps } from "../../types";
 import { formatCurrency, formatDistanceFromNow } from "../../utils/helpers";
 import Table from "../../ui/Table";
@@ -6,7 +7,7 @@ import Tag from "../../ui/Tag";
 import Menus from "../../ui/Menus";
 import styled from "styled-components";
 import { format, isToday } from "date-fns";
-import { HiArrowDownOnSquare, HiEye } from "react-icons/hi2";
+import { HiArrowDownOnSquare, HiArrowUpOnSquare, HiEye } from "react-icons/hi2";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -37,6 +38,7 @@ const Amount = styled.div`
 
 function BookingRow({ booking }: { booking: IBookingRowProps }) {
   const navigate = useNavigate();
+  const { checkout, isCheckingOut } = useCheckout();
 
   const statusToTagName = {
     unconfirmed: "blue",
@@ -55,10 +57,8 @@ function BookingRow({ booking }: { booking: IBookingRowProps }) {
 
       <Stacked>
         <span>
-          {isToday(new Date(booking.startDate))
-            ? "Today"
-            : formatDistanceFromNow(booking.startDate)}{" "}
-          &rarr; {booking.numNights} night stay
+          {isToday(new Date(booking.startDate)) ? "Today" : formatDistanceFromNow(booking.startDate)} &rarr;{" "}
+          {booking.numNights} night stay
         </span>
         <span>
           {format(new Date(booking.startDate), "MMM dd yyyy")} &mdash;{" "}
@@ -66,28 +66,26 @@ function BookingRow({ booking }: { booking: IBookingRowProps }) {
         </span>
       </Stacked>
 
-      <Tag $type={statusToTagName[booking.status]}>
-        {booking.status.replace("-", " ")}
-      </Tag>
+      <Tag $type={statusToTagName[booking.status]}>{booking.status.replace("-", " ")}</Tag>
 
       <Amount>{formatCurrency(booking.totalPrice)}</Amount>
 
       <Menus.Menu>
         <Menus.Toggle id={booking.id.toString()} />
         <Menus.List id={booking.id.toString()}>
-          <Menus.Button
-            icon={<HiEye />}
-            onClick={() => navigate(`/bookings/${booking.id}`)}
-          >
+          <Menus.Button icon={<HiEye />} onClick={() => navigate(`/bookings/${booking.id}`)}>
             See Details
           </Menus.Button>
 
           {booking.status === "unconfirmed" && (
-            <Menus.Button
-              icon={<HiArrowDownOnSquare />}
-              onClick={() => navigate(`/checkin/${booking.id}`)}
-            >
+            <Menus.Button icon={<HiArrowDownOnSquare />} onClick={() => navigate(`/checkin/${booking.id}`)}>
               Check in
+            </Menus.Button>
+          )}
+
+          {booking.status === "checked-in" && (
+            <Menus.Button icon={<HiArrowUpOnSquare />} disabled={isCheckingOut} onClick={() => checkout(booking.id)}>
+              Check out
             </Menus.Button>
           )}
         </Menus.List>

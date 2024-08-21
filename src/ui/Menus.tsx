@@ -86,19 +86,13 @@ const MenusContext = createContext<IMenusProps>({
 
 const Menus = ({ children }: { children: React.ReactNode }) => {
   const [openId, setOpenId] = useState("");
-  const [position, setPosition] = useState<null | { x: number; y: number }>(
-    null
-  );
+  const [position, setPosition] = useState<null | { x: number; y: number }>(null);
 
   const open = (id: string) => setOpenId(id);
   const close = () => setOpenId("");
 
   return (
-    <MenusContext.Provider
-      value={{ openId, close, open, position, setPosition }}
-    >
-      {children}
-    </MenusContext.Provider>
+    <MenusContext.Provider value={{ openId, close, open, position, setPosition }}>{children}</MenusContext.Provider>
   );
 };
 
@@ -106,9 +100,7 @@ const Toggle = ({ id }: { id: string }) => {
   const { openId, open, close, setPosition } = useContext(MenusContext);
 
   const handleClick = (e: React.MouseEvent) => {
-    const rect = (e.target as HTMLElement)
-      .closest("button")!
-      .getBoundingClientRect();
+    const rect = (e.target as HTMLElement).closest("button")!.getBoundingClientRect();
 
     setPosition({
       x: -8,
@@ -134,10 +126,7 @@ const List = ({ id, children }: { id: string; children: React.ReactNode }) => {
   if (openId !== id) return null;
 
   return (
-    <StyledList
-      $position={position!}
-      ref={ref as unknown as React.RefObject<HTMLUListElement>}
-    >
+    <StyledList $position={position!} ref={ref as unknown as React.RefObject<HTMLUListElement>}>
       {children}
     </StyledList>
   );
@@ -146,10 +135,12 @@ const List = ({ id, children }: { id: string; children: React.ReactNode }) => {
 const Button = ({
   icon,
   children,
+  disabled,
   onClick,
 }: {
   icon: React.ReactNode;
   children: React.ReactNode;
+  disabled?: boolean;
   onClick?: () => void;
 }) => {
   const { close } = useContext(MenusContext);
@@ -160,7 +151,7 @@ const Button = ({
 
   return (
     <li>
-      <StyledButton onClick={handleClick}>
+      <StyledButton disabled={disabled} onClick={handleClick}>
         {icon}
         <span>{children}</span>
       </StyledButton>
