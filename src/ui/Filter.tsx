@@ -39,19 +39,13 @@ const FilterButton = styled.button<IFilterButtonProps>`
   }
 `;
 
-const Filter = ({
-  filterField,
-  options,
-}: {
-  filterField: string;
-  options: { value: string; label: string }[];
-}) => {
+const Filter = ({ filterField, options }: { filterField: string; options: { value: string; label: string }[] }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentFilter = searchParams.get(filterField) || options[0].value;
 
   const handleClick = (value: string) => {
     searchParams.set(filterField, value);
-    searchParams.set("page", "1");
+    if (searchParams.get("page")) searchParams.set("page", "1");
     setSearchParams(searchParams);
   };
 
