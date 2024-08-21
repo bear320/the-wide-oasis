@@ -1,3 +1,7 @@
+import { IBookingDetailsProps } from "../../types";
+import { formatDistanceFromNow, formatCurrency } from "../../utils/helpers";
+import DataItem from "../../ui/DataItem";
+import { Flag } from "../../ui/Flag";
 import styled from "styled-components";
 import { format, isToday } from "date-fns";
 import {
@@ -7,47 +11,41 @@ import {
   HiOutlineHomeModern,
 } from "react-icons/hi2";
 
-import DataItem from "../../ui/DataItem";
-import { Flag } from "../../ui/Flag";
-
-import { formatDistanceFromNow, formatCurrency } from "../../utils/helpers";
-
 const StyledBookingDataBox = styled.section`
   /* Box */
-  background-color: var(--color-grey-0);
   border: 1px solid var(--color-grey-100);
   border-radius: var(--border-radius-md);
-
+  background-color: var(--color-grey-0);
   overflow: hidden;
 `;
 
 const Header = styled.header`
-  background-color: var(--color-brand-500);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 2rem 4rem;
+  background-color: var(--color-brand-500);
   color: #e0e7ff;
   font-size: 1.8rem;
   font-weight: 500;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 
   svg {
-    height: 3.2rem;
     width: 3.2rem;
+    height: 3.2rem;
   }
 
   & div:first-child {
     display: flex;
     align-items: center;
     gap: 1.6rem;
-    font-weight: 600;
     font-size: 1.8rem;
+    font-weight: 600;
   }
 
   & span {
+    margin-left: 4px;
     font-family: "Sono";
     font-size: 2rem;
-    margin-left: 4px;
   }
 `;
 
@@ -63,23 +61,26 @@ const Guest = styled.div`
   color: var(--color-grey-500);
 
   & p:first-of-type {
-    font-weight: 500;
     color: var(--color-grey-700);
+    font-weight: 500;
   }
 `;
 
-const Price = styled.div`
+interface IPriceProps {
+  $isPaid: boolean;
+}
+
+const Price = styled.div<IPriceProps>`
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+  margin-top: 2.4rem;
   padding: 1.6rem 3.2rem;
   border-radius: var(--border-radius-sm);
-  margin-top: 2.4rem;
-
   background-color: ${(props) =>
-    props.isPaid ? "var(--color-green-100)" : "var(--color-yellow-100)"};
+    props.$isPaid ? "var(--color-green-100)" : "var(--color-yellow-100)"};
   color: ${(props) =>
-    props.isPaid ? "var(--color-green-700)" : "var(--color-yellow-700)"};
+    props.$isPaid ? "var(--color-green-700)" : "var(--color-yellow-700)"};
 
   & p:last-child {
     text-transform: uppercase;
@@ -96,13 +97,13 @@ const Price = styled.div`
 
 const Footer = styled.footer`
   padding: 1.6rem 4rem;
-  font-size: 1.2rem;
   color: var(--color-grey-500);
+  font-size: 1.2rem;
   text-align: right;
 `;
 
 // A purely presentational component
-function BookingDataBox({ booking }) {
+function BookingDataBox({ booking }: { booking: IBookingDetailsProps }) {
   const {
     created_at,
     startDate,
@@ -115,7 +116,13 @@ function BookingDataBox({ booking }) {
     hasBreakfast,
     observations,
     isPaid,
-    guests: { fullName: guestName, email, country, countryFlag, nationalID },
+    guests: {
+      fullName: guestName,
+      email,
+      nationalID,
+      nationality,
+      nationalFlag,
+    },
     cabins: { name: cabinName },
   } = booking;
 
@@ -140,7 +147,9 @@ function BookingDataBox({ booking }) {
 
       <Section>
         <Guest>
-          {countryFlag && <Flag src={countryFlag} alt={`Flag of ${country}`} />}
+          {nationalFlag && (
+            <Flag src={nationalFlag} alt={`Flag of ${nationality}`} />
+          )}
           <p>
             {guestName} {numGuests > 1 ? `+ ${numGuests - 1} guests` : ""}
           </p>
@@ -163,7 +172,7 @@ function BookingDataBox({ booking }) {
           {hasBreakfast ? "Yes" : "No"}
         </DataItem>
 
-        <Price isPaid={isPaid}>
+        <Price $isPaid={isPaid}>
           <DataItem icon={<HiOutlineCurrencyDollar />} label={`Total price`}>
             {formatCurrency(totalPrice)}
 

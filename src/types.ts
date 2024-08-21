@@ -16,7 +16,7 @@ export interface IBooking {
   guestId: number;
 }
 
-export interface IBookingProps
+export interface IBookingRowProps
   extends Omit<
     IBooking,
     | "cabinPrice"
@@ -27,8 +27,13 @@ export interface IBookingProps
     | "cabinId"
     | "guestId"
   > {
-  guests: { fullName: string; email: string };
-  cabins: { name: string };
+  guests: Pick<IGuest, "fullName" | "email">;
+  cabins: Pick<ICabin, "name">;
+}
+
+export interface IBookingDetailsProps extends IBooking {
+  cabins: ICabin;
+  guests: IGuest;
 }
 
 export interface ICabin {
@@ -43,6 +48,16 @@ export interface ICabin {
 }
 
 export type ICabinMutation = Omit<ICabin, "id" | "created_at">;
+
+export interface IGuest {
+  id: number;
+  fullName: string;
+  email: string;
+  nationalID: string;
+  nationality: string;
+  nationalFlag: string;
+  created_at: string;
+}
 
 export enum Setting {
   minBookingLength = "minBookingLength",
