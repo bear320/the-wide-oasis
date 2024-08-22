@@ -15,7 +15,16 @@ function LoginForm() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    if (email && password) login({ email, password });
+    if (email && password)
+      login(
+        { email, password },
+        {
+          onSettled: () => {
+            setEmail("");
+            setPassword("");
+          },
+        }
+      );
   }
 
   return (
