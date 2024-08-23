@@ -65,3 +65,9 @@ export enum Setting {
   maxGuestsPerBooking = "maxGuestsPerBooking",
   breakfastPrice = "breakfastPrice",
 }
+
+export interface IRegister {
+  fullName: string;
+  email: string;
+  password: string;
+}
