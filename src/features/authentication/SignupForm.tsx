@@ -49,10 +49,7 @@ function SignupForm() {
         />
       </FormRow>
 
-      <FormRow
-        label="Password (min 8 characters)"
-        error={errors?.password?.message?.toString()}
-      >
+      <FormRow label="Password (min 8 characters)" error={errors?.password?.message?.toString()}>
         <Input
           type="password"
           id="password"
@@ -67,25 +64,21 @@ function SignupForm() {
         />
       </FormRow>
 
-      <FormRow
-        label="Repeat password"
-        error={errors?.passwordConfirm?.message?.toString()}
-      >
+      <FormRow label="Repeat password" error={errors?.passwordConfirm?.message?.toString()}>
         <Input
           type="password"
           id="passwordConfirm"
           disabled={isLoading}
           {...register("passwordConfirm", {
             required: "Please repeat the password.",
-            validate: (value) =>
-              value === getValues().password || "Passwords need to match.",
+            validate: (value) => value === getValues().password || "Passwords need to match.",
           })}
         />
       </FormRow>
 
       <FormRow>
         <>
-          <Button $variation="secondary" type="reset" disabled={isLoading}>
+          <Button $variation="secondary" type="reset" disabled={isLoading} onClick={reset}>
             Cancel
           </Button>
           <Button disabled={isLoading}>Create new user</Button>

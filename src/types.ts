@@ -19,13 +19,7 @@ export interface IBooking {
 export interface IBookingRowProps
   extends Omit<
     IBooking,
-    | "cabinPrice"
-    | "extrasPrice"
-    | "hasBreakfast"
-    | "isPaid"
-    | "observations"
-    | "cabinId"
-    | "guestId"
+    "cabinPrice" | "extrasPrice" | "hasBreakfast" | "isPaid" | "observations" | "cabinId" | "guestId"
   > {
   guests: Pick<IGuest, "fullName" | "email">;
   cabins: Pick<ICabin, "name">;
@@ -66,8 +60,10 @@ export enum Setting {
   breakfastPrice = "breakfastPrice",
 }
 
-export interface IRegister {
+export interface IUser {
+  id: number;
   fullName: string;
   email: string;
+  avatar: File | string;
   password: string;
 }
