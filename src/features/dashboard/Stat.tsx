@@ -47,7 +47,17 @@ const Value = styled.p`
   font-weight: 500;
 `;
 
-function Stat({ icon, title, value, color }) {
+function Stat({
+  title,
+  value,
+  color,
+  icon,
+}: {
+  title: string;
+  value: number | string;
+  color: string;
+  icon: React.ReactNode;
+}) {
   return (
     <StyledStat>
       <Icon color={color}>{icon}</Icon>
