@@ -7,12 +7,12 @@ import FormRowVertical from "../../ui/FormRowVertical";
 import SpinnerMini from "../../ui/SpinnerMini";
 
 function LoginForm() {
-  const [email, setEmail] = useState("admin@example.com");
+  const [email, setEmail] = useState("test@test.com");
   const [password, setPassword] = useState("password");
 
   const { login, isLoading } = useLogin();
 
-  function handleSubmit(e: React.FormEvent) {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (email && password)
@@ -25,7 +25,7 @@ function LoginForm() {
           },
         }
       );
-  }
+  };
 
   return (
     <Form onSubmit={handleSubmit}>
