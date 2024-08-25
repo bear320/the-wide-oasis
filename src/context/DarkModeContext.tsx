@@ -9,7 +9,12 @@ interface IDarkModeContext {
 const DarkModeContext = createContext<IDarkModeContext>({} as IDarkModeContext);
 
 const DarkModeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isDarkMode, setIsDarkMode] = useLocalStorageState(false, "isDarkMode");
+  const [isDarkMode, setIsDarkMode] = useLocalStorageState(
+    window.matchMedia("(prefers-color-scheme: dark)").matches,
+    "isDarkMode"
+  );
+
+  console.log(window.matchMedia("(prefers-color-scheme: dark)").matches);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark-mode");
