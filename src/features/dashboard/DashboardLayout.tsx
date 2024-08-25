@@ -4,6 +4,7 @@ import { useCabins } from "../cabins/useCabins";
 import { IBooking } from "../../types";
 import Spinner from "../../ui/Spinner";
 import Stats from "./Stats";
+import TodayActivity from "../check-in-out/TodayActivity";
 import SalesChart from "./SalesChart";
 import DurationChart from "./DurationChart";
 import styled from "styled-components";
@@ -17,7 +18,7 @@ const StyledDashboardLayout = styled.div`
 
 const DashboardLayout = () => {
   const { bookings, isLoadingBookings } = useRecentBookings();
-  const { numDays, stays, confirmedStays, isLoadingStays } = useRecentStays();
+  const { numDays, confirmedStays, isLoadingStays } = useRecentStays();
   const { cabins, isFetching: isLoadingCabins } = useCabins();
 
   if (isLoadingBookings || isLoadingStays || isLoadingCabins) return <Spinner />;
@@ -30,7 +31,7 @@ const DashboardLayout = () => {
         numDays={numDays}
         cabinCount={Number(cabins?.length)}
       />
-      <div>Today's activity</div>
+      <TodayActivity />
       <DurationChart confirmedStays={confirmedStays as IBooking[]} />
       <SalesChart bookings={bookings as IBooking[]} numDays={numDays} />
     </StyledDashboardLayout>

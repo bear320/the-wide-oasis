@@ -1,8 +1,8 @@
-import styled from "styled-components";
+import { useDarkMode } from "../../context/DarkModeContext";
 import { IBooking } from "../../types";
 import Heading from "../../ui/Heading";
+import styled from "styled-components";
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
-import { useDarkMode } from "../../context/DarkModeContext";
 
 const ChartBox = styled.div`
   /* Box */
