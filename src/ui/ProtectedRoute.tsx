@@ -19,7 +19,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
 
   // 1. Load the authenticated user
-  const { user, isLoading, isAuthenticated } = useUser();
+  const { isLoading, isAuthenticated } = useUser();
 
   // 2. If there is no authenticated user, redirect to the login page
   if (!isAuthenticated && !isLoading) navigate("/login");

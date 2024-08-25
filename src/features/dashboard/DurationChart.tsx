@@ -156,7 +156,7 @@ const DurationChart = ({ confirmedStays }: { confirmedStays: IBooking[] }) => {
             ))}
           </Pie>
           <Tooltip />
-          <Legend verticalAlign="middle" align="right" width="30%" layout="vertical" iconSize={15} iconType="circle" />
+          <Legend verticalAlign="middle" align="right" layout="vertical" iconSize={15} iconType="circle" />
         </PieChart>
       </ResponsiveContainer>
     </ChartBox>

@@ -29,7 +29,7 @@ const SalesChart = ({ bookings, numDays }: { bookings: IBooking[]; numDays: numb
       totalSales: bookings
         .filter((booking) => isSameDay(date, new Date(booking.created_at)))
         .reduce((acc, cur) => acc + cur.totalPrice, 0),
-      extrasSale: bookings
+      extrasSales: bookings
         .filter((booking) => isSameDay(date, new Date(booking.created_at)))
         .reduce((acc, cur) => acc + cur.extrasPrice, 0),
     };

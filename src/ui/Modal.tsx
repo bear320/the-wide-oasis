@@ -88,7 +88,7 @@ const Window = ({ children, name }: { children: React.ReactNode; name: string })
 
   return createPortal(
     <Overlay>
-      <StyledModal ref={ref}>
+      <StyledModal ref={ref as unknown as React.RefObject<HTMLDivElement>}>
         <Button onClick={close}>
           <HiXMark />
         </Button>
