@@ -9,7 +9,6 @@ import { eachDayOfInterval, format, isSameDay, subDays } from "date-fns";
 const StyledSalesChart = styled(DashboardBox)`
   grid-column: 1 / -1;
 
-  /* Hack to change grid line colors */
   & .recharts-cartesian-grid-horizontal line,
   & .recharts-cartesian-grid-vertical line {
     stroke: var(--color-grey-300);
@@ -52,7 +51,9 @@ const SalesChart = ({ bookings, numDays }: { bookings: IBooking[]; numDays: numb
 
   return (
     <StyledSalesChart>
-      <Heading as="h2">Sales</Heading>
+      <Heading as="h2">
+        Sales from {format(allDates[0], "MMM dd yyyy")} &mdash; {format(allDates[numDays - 1], "MMM dd yyyy")}
+      </Heading>
 
       <ResponsiveContainer width="100%" height={300}>
         <AreaChart data={data}>

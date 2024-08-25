@@ -1,11 +1,12 @@
 import { useRecentBookings } from "./useRecentBookings";
 import { useRecentStays } from "./useRecentStays";
+import { useCabins } from "../cabins/useCabins";
 import { IBooking } from "../../types";
 import Spinner from "../../ui/Spinner";
 import Stats from "./Stats";
-import styled from "styled-components";
-import { useCabins } from "../cabins/useCabins";
 import SalesChart from "./SalesChart";
+import DurationChart from "./DurationChart";
+import styled from "styled-components";
 
 const StyledDashboardLayout = styled.div`
   display: grid;
@@ -30,7 +31,7 @@ const DashboardLayout = () => {
         cabinCount={Number(cabins?.length)}
       />
       <div>Today's activity</div>
-      <div>Chart stay durations</div>
+      <DurationChart confirmedStays={confirmedStays as IBooking[]} />
       <SalesChart bookings={bookings as IBooking[]} numDays={numDays} />
     </StyledDashboardLayout>
   );

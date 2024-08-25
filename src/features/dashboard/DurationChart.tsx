@@ -1,4 +1,8 @@
 import styled from "styled-components";
+import { IBooking } from "../../types";
+import Heading from "../../ui/Heading";
+import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
+import { useDarkMode } from "../../context/DarkModeContext";
 
 const ChartBox = styled.div`
   /* Box */
@@ -104,14 +108,10 @@ const startDataDark = [
   },
 ];
 
-function prepareData(startData, stays) {
-  // A bit ugly code, but sometimes this is what it takes when working with real data 😅
-
-  function incArrayValue(arr, field) {
-    return arr.map((obj) =>
-      obj.duration === field ? { ...obj, value: obj.value + 1 } : obj
-    );
-  }
+const prepareData = (startData: { duration: string; value: number; color: string }[], stays: IBooking[]) => {
+  const incArrayValue = (arr: typeof startData, field: string) => {
+    return arr.map((obj) => (obj.duration === field ? { ...obj, value: obj.value + 1 } : obj));
+  };
 
   const data = stays
     .reduce((arr, cur) => {
@@ -129,4 +129,38 @@ function prepareData(startData, stays) {
     .filter((obj) => obj.value > 0);
 
   return data;
-}
+};
+
+const DurationChart = ({ confirmedStays }: { confirmedStays: IBooking[] }) => {
+  const { isDarkMode } = useDarkMode();
+  const startData = isDarkMode ? startDataDark : startDataLight;
+  const data = prepareData(startData, confirmedStays);
+
+  return (
+    <ChartBox>
+      <Heading as="h2">Stay duration summary</Heading>
+      <ResponsiveContainer width="100%" height={240}>
+        <PieChart>
+          <Pie
+            data={data}
+            nameKey="duration"
+            dataKey="value"
+            innerRadius={55}
+            outerRadius={85}
+            paddingAngle={3}
+            cx="40%"
+            cy="50%"
+          >
+            {data.map((entry) => (
+              <Cell fill={entry.color} stroke={entry.color} key={entry.duration} />
+            ))}
+          </Pie>
+          <Tooltip />
+          <Legend verticalAlign="middle" align="right" width="30%" layout="vertical" iconSize={15} iconType="circle" />
+        </PieChart>
+      </ResponsiveContainer>
+    </ChartBox>
+  );
+};
+
+export default DurationChart;
